@@ -3,16 +3,35 @@
     <title>Books API Example</title>
   </head>
   <body>
+    <form id="isbn_f" class="" action="index.html" method="post">
+      <input type="text" id="isbn_i" name="isbn_i"/>
+      <label for="isbn_i">isbn, pas de tiret</label>
+      <input type="submit" name="bob">
+    </form>
     <div id="content"></div>
     <script>
-      function handleResponse(response) {
+    function handleResponse(response) {
       for (var i = 0; i < response.items.length; i++) {
         var item = response.items[i];
         // in production code, item.text should have the HTML entities escaped.
         document.getElementById("content").innerHTML += "<pre>" + JSON.stringify(item, null, 2) +'</pre>';
       }
     }
+    function readISBN(isbn) {
+
+    }
     </script>
-    <script src="https://www.googleapis.com/books/v1/volumes?q=isbn:2877308464&callback=handleResponse"></script>
+    <!--script src="https://www.googleapis.com/books/v1/volumes?q=isbn:2877308464&callback=handleResponse"></script-->
+    <script>
+    document.getElementById('isbn_f').addEventListener('submit', function(ev) {
+      ev.preventDefault();
+      var isbn = document.getElementById('isbn_i').value;
+      var req = new XMLHttpRequest();
+      req.open('GET', 'https://www.googleapis.com/books/v1/volumes?q=isbn:'+isbn, false);
+      req.send(null);
+      if(req.status == 200)
+        handleResponse(JSON.parse(req.responseText));
+    })
+    </script>
   </body>
 </html>
